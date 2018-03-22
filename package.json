@@ -2,10 +2,14 @@
   "name": "diagram-builder",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "directories": { "bin": "bin" },
+  "main": "bin/buildDiagram.js",
+  "scripts": {
+    "start": "node bin/buildDiagram.js"
+  },
   "dependencies": {
     "glob": "^7.1.2",
     "mkdirp": "^0.5.1",

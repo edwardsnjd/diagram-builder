@@ -1,4 +1,6 @@
-const main = require('./main');
+#!/usr/bin/env node
+
+const main = require('../main');
 
 const execute = (...args) => {
   try {
