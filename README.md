@@ -1,7 +1,15 @@
-Growbot Docs
-============
+Diagram builder
+===============
 
-Repo supporting Growbot documentation.
+Simple utility to help building diagrams from text files.
 
-Includes things like:
-- sequence diagrams
+Currently only supports sequence diagrams.
+
+Usage
+-----
+
+`npm start inputDir outputDir`
+
+Where:
+- `inputDir` - the path to a directory of input docs
+- `outputDir` - the path to a directory to contain output diagrams
