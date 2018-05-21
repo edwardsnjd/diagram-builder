@@ -20,11 +20,38 @@ function findDiagramTypeByExtension(relativePath, storage) {
 
 function findGenerator(diagramType) {
   const generators = {
-    [DIAGRAM_TYPES.sequence]: (diagramText) => getSequenceDiagram(diagramText, {format: 'png', style: 'modern-blue'}),
-    [DIAGRAM_TYPES.state]:    (diagramText) => getStateDiagram(diagramText, {format: 'png'}),
+    [DIAGRAM_TYPES.sequence]: generateSequenceDiagram,
+    [DIAGRAM_TYPES.state]:    generateStateDiagram,
   };
   return generators[diagramType];
 }
+
+const SequenceDiagramCommentRegex = /^#/;
+const generateSequenceDiagram = (diagramText) => {
+  const directives = findDirectives(diagramText, SequenceDiagramCommentRegex);
+  const defaults = {format: 'png', style: 'modern-blue'};
+  return getSequenceDiagram(diagramText, Object.assign(defaults, directives));
+};
+
+const StateDiagramCommentRegex = /^\/\//;
+const generateStateDiagram = (diagramText) => {
+  const directives = findDirectives(diagramText, StateDiagramCommentRegex);
+  const defaults = {format: 'png', direction: 'left-right'};
+  return getStateDiagram(diagramText, Object.assign(defaults, directives));
+};
+
+const DirectiveRegEx = /\s*diagramBuilder-(\S+)\s*:\s*(\S+)\s*$/;
+const findDirectives = (diagramText, commentRegex) =>
+  diagramText
+    .split('\n')
+    .filter(line => line.match(commentRegex))
+    .map(line => line.match(DirectiveRegEx))
+    .filter(Boolean)
+    .map(([_, directive, value]) => ({directive, value}))
+    .reduce((acc, item) => {
+      acc[item.directive] = item.value;
+      return acc;
+    }, {});
 
 function handleDiagram(relativePath, storage) {
   console.log('Processing file', relativePath);
